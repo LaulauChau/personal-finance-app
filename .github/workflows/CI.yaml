@@ -1,0 +1,107 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - master
+    types: [opened, reopened, synchronize]
+  push:
+    branches:
+      - dev
+      - master
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.11.0]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+  build:
+    needs: [lint]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.11.0]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: SKIP_ENV_VALIDATION=true pnpm build
+
+  test:
+    needs: [lint, build]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.11.0]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Unit test
+        run: pnpm test
+
+      - name: Integration test
+        run: pnpm test:integration
+
+      - name: Create Status Artifact
+        if: success()
+        run: echo "CI passed" > ci_status.txt
+
+      - name: Upload Status Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-status
+          path: ci_status.txt

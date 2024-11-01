@@ -1,0 +1,56 @@
+name: "personal-finance-app"
+
+services:
+  app:
+    build:
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+    container_name: app
+    depends_on:
+      database:
+        condition: service_healthy
+    develop:
+      watch:
+        - action: sync
+          path: ../../
+          target: /usr/src/app
+          ignore:
+            - .git
+            - node_modules/
+
+        - action: rebuild
+          path: ../../package.json
+    env_file:
+      - path: ../../.env
+        required: true
+    networks:
+      - app-network
+    ports:
+      - "3000:3000"
+
+  database:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      interval: 10s
+      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      timeout: 5s
+    networks:
+      - app-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../../migrations:/docker-entrypoint-initdb.d
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    name: pfa_postgres_data

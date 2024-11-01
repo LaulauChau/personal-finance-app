@@ -1,0 +1,66 @@
+{
+  "name": "personal-finance-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "build": "next build",
+    "commit": "git-cz",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "dev": "next dev --turbopack",
+    "lint": "biome check --no-errors-on-unmatched --files-ignore-unknown=true --write .",
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "if [ -d .git ]; then husky; fi",
+    "start": "cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static && node .next/standalone/server/index.js",
+    "test": "vitest run",
+    "test:integration": "vitest -c vitest.config.integration.ts run"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.0.0",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
+    "@t3-oss/env-nextjs": "^0.11.1",
+    "drizzle-orm": "^0.36.0",
+    "next": "15.0.2",
+    "postgres": "^3.4.5",
+    "react": "19.0.0-rc-02c0e824-20241028",
+    "react-dom": "19.0.0-rc-02c0e824-20241028",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@commitlint/cz-commitlint": "^19.5.0",
+    "@commitlint/types": "^19.5.0",
+    "@testcontainers/postgresql": "^10.13.2",
+    "@types/node": "^22.8.6",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "commitizen": "^4.3.1",
+    "drizzle-kit": "^0.27.0",
+    "husky": "^9.1.6",
+    "inquirer": "^12.0.1",
+    "lint-staged": "^15.2.10",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  },
+  "packageManager": "pnpm@9.12.3",
+  "engines": {
+    "bun": "please-use-pnpm",
+    "node": ">=22.11.0",
+    "npm": "please-use-pnpm",
+    "pnpm": ">=9.12.3",
+    "yarn": "please-use-pnpm"
+  }
+}
