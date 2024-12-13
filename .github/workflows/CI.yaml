@@ -185,6 +185,10 @@ jobs:
 
       - name: Create status artifact
         if: success()
+        run: echo "CI passed" > ci_status.txt
+
+      - name: Upload status artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: ci-status
