@@ -2,23 +2,38 @@
   "name": "personal-finance-app",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "next dev --turbopack",
+    "lint": "biome check --no-errors-on-unmatched --files-ignore-unknown=true --write .",
+    "preinstall": "npx only-allow pnpm",
+    "start": "cp -r public .next/standalone/public && cp -r .next/static .next/standalone/static && node .next/standalone/server.js"
   },
   "dependencies": {
+    "@t3-oss/env-nextjs": "^0.11.1",
+    "next": "15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.0"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "typescript": "^5.7.2"
+  },
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "bun": "please-use-pnpm",
+    "node": ">=22.11.0",
+    "npm": "please-use-pnpm",
+    "pnpm": ">=9.15.0",
+    "yarn": "please-use-pnpm"
   }
 }
