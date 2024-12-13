@@ -12,7 +12,8 @@
     "lint": "biome check --no-errors-on-unmatched --files-ignore-unknown=true --write .",
     "preinstall": "npx only-allow pnpm",
     "prepare": "if [ -d .git ]; then husky; fi",
-    "start": "cp -r public .next/standalone/public && cp -r .next/static .next/standalone/static && node .next/standalone/server.js"
+    "start": "cp -r public .next/standalone/public && cp -r .next/static .next/standalone/static && node .next/standalone/server.js",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@t3-oss/env-nextjs": "^0.11.1",
